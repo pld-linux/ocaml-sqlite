@@ -1,5 +1,5 @@
 Summary:	sqlite3 binding for OCaml
-Name:		ocaml-sqlite3
+Name:		ocaml-sqlite
 Version:	1.6.3
 Release:	1
 License:	BSD
