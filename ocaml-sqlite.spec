@@ -1,11 +1,17 @@
+# TODO
+# - tests. W: Tests are turned off, consider enabling with 'ocaml setup.ml -configure --enable-tests'
+#
+# Conditional build:
+%bcond_with	opt		# build opt
+
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
-Version:	1.6.3
+Version:	2.0.4
 Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-%{version}.tar.gz
-# Source0-md5:	bb27e99eed1c35989854272f7e83a232
+# Source0-md5:	ae90c81f24322afad47678ffdc6c2a64
 URL:		https://bitbucket.org/mmottl/sqlite3-ocaml
 BuildRequires:	ocaml-findlib-devel
 BuildRequires:	ocaml-camlp4
@@ -34,14 +40,15 @@ ocaml-sqlite3 library.
 ./configure \
 	--libdir=%{_libdir}
 
-%{__make} -j1 CC="%{__cc} %{rpmcflags} -fPIC" all opt
+%{__make} -j1 all %{?with_opt:opt} \
+	CC="%{__cc} %{rpmcflags} -fPIC"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{sqlite3,stublibs}
-install *.cm[ixa]* *.a $RPM_BUILD_ROOT%{_libdir}/ocaml/sqlite3
-install dll*.so $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs
+cp -p _build/lib/*.cm[ixa]* _build/lib/*.a $RPM_BUILD_ROOT%{_libdir}/ocaml/sqlite3
+install -p _build/lib/dll*.so $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs
 
 install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/sqlite3
 cat > $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/sqlite3/META <<EOF
@@ -63,7 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc Changelog README.txt TODO *.mli
+%doc CHANGES.txt README.md TODO.md lib/sqlite3.mli test
 %dir %{_libdir}/ocaml/sqlite3
 %{_libdir}/ocaml/sqlite3/*.cm[ixa]*
 %{_libdir}/ocaml/sqlite3/*.a
