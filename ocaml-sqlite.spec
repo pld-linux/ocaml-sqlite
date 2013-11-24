@@ -4,6 +4,7 @@
 # Conditional build:
 %bcond_with	opt		# build opt
 
+%define		module	sqlite3
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
 Version:	2.0.4
@@ -13,10 +14,10 @@ Group:		Libraries
 Source0:	https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-%{version}.tar.gz
 # Source0-md5:	ae90c81f24322afad47678ffdc6c2a64
 URL:		https://bitbucket.org/mmottl/sqlite3-ocaml
-BuildRequires:	ocaml-findlib-devel
-BuildRequires:	ocaml-camlp4
-BuildRequires:	sqlite3-devel
 BuildRequires:	ocaml >= 3.04-7
+BuildRequires:	ocaml-camlp4
+BuildRequires:	ocaml-findlib-devel
+BuildRequires:	sqlite3-devel
 %requires_eq	ocaml-runtime
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -34,7 +35,7 @@ This package contains files needed to develop OCaml programs using
 ocaml-sqlite3 library.
 
 %prep
-%setup -q -n sqlite3-ocaml-%{version}
+%setup -q -n %{module}-ocaml-%{version}
 
 %build
 ./configure \
@@ -46,18 +47,18 @@ ocaml-sqlite3 library.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{sqlite3,stublibs}
-cp -p _build/lib/*.cm[ixa]* _build/lib/*.a $RPM_BUILD_ROOT%{_libdir}/ocaml/sqlite3
+install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{%{module},stublibs}
+cp -p _build/lib/*.cm[ixa]* _build/lib/*.a $RPM_BUILD_ROOT%{_libdir}/ocaml/%{module}
 install -p _build/lib/dll*.so $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs
 
-install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/sqlite3
-cat > $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/sqlite3/META <<EOF
+install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/%{module}
+cat > $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/%{module}/META <<EOF
 requires = ""
 version = "%{version}"
-description="Ocaml bindings to Sqlite 3"
-directory = "+sqlite3"
-archive(byte) = "sqlite3.cma"
-archive(native) = "sqlite3.cmxa"
+description="Ocaml bindings to Sqlite3"
+directory = "+%{module}"
+archive(byte) = "%{module}.cma"
+archive(native) = "%{module}.cmxa"
 linkopts = ""
 EOF
 
@@ -70,8 +71,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc CHANGES.txt README.md TODO.md lib/sqlite3.mli test
-%dir %{_libdir}/ocaml/sqlite3
-%{_libdir}/ocaml/sqlite3/*.cm[ixa]*
-%{_libdir}/ocaml/sqlite3/*.a
-%{_libdir}/ocaml/site-lib/sqlite3
+%doc CHANGES.txt README.md TODO.md lib/%{module}.mli test
+%dir %{_libdir}/ocaml/%{module}
+%{_libdir}/ocaml/%{module}/*.cm[xi]
+%{_libdir}/ocaml/%{module}/*.cma
+%{_libdir}/ocaml/%{module}/*.cmx[as]
+%{_libdir}/ocaml/%{module}/*.a
+%{_libdir}/ocaml/site-lib/%{module}
