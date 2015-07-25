@@ -2,13 +2,18 @@
 # - tests. W: Tests are turned off, consider enabling with 'ocaml setup.ml -configure --enable-tests'
 #
 # Conditional build:
-%bcond_with	opt		# build opt
+%bcond_without	ocaml_opt	# skip building native optimized binaries (bytecode is always built)
+
+# not yet available on x32 (ocaml 4.02.1), remove when upstream will support it
+%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
+%undefine	with_ocaml_opt
+%endif
 
 %define		module	sqlite3
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
 Version:	2.0.4
-Release:	2
+Release:	3
 License:	BSD
 Group:		Libraries
 Source0:	https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-%{version}.tar.gz
@@ -41,7 +46,7 @@ ocaml-sqlite3 library.
 ./configure \
 	--libdir=%{_libdir}
 
-%{__make} -j1 all %{?with_opt:opt} \
+%{__make} -j1 all %{?with_ocaml_opt:opt} \
 	CC="%{__cc} %{rpmcflags} -fPIC"
 
 %install
@@ -75,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/ocaml/%{module}
 %{_libdir}/ocaml/%{module}/*.cm[xi]
 %{_libdir}/ocaml/%{module}/*.cma
+%{_libdir}/ocaml/%{module}/libsqlite3_stubs.a
+%if %{with ocaml_opt}
 %{_libdir}/ocaml/%{module}/*.cmx[as]
-%{_libdir}/ocaml/%{module}/*.a
+%{_libdir}/ocaml/%{module}/sqlite3.a
+%endif
 %{_libdir}/ocaml/site-lib/%{module}
