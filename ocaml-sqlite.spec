@@ -46,7 +46,7 @@ ocaml-sqlite3 library.
 ./configure \
 	--libdir=%{_libdir}
 
-%{__make} -j1 all %{?with_ocaml_opt:opt} \
+%{__make} -j1 all \
 	CC="%{__cc} %{rpmcflags} -fPIC"
 
 %install
