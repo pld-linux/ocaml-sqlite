@@ -13,7 +13,7 @@
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
 Version:	2.0.4
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries
 Source0:	https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-%{version}.tar.gz
