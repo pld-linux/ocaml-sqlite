@@ -9,6 +9,10 @@
 %undefine	with_ocaml_opt
 %endif
 
+%if %{without ocaml_opt}
+%define		_enable_debug_packages	0
+%endif
+
 %define		module	sqlite3
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
