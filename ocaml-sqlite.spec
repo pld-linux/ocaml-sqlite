@@ -22,6 +22,7 @@ URL:		http://mmottl.github.io/sqlite3-ocaml/
 BuildRequires:	ocaml >= 3.04-7
 BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-findlib-devel
+BuildRequires:	ocaml-ocamlbuild
 BuildRequires:	sqlite3-devel
 %requires_eq	ocaml-runtime
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -76,18 +77,18 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/%{module}/*.cmi
 %{_libdir}/ocaml/%{module}/*.cmt
 %{_libdir}/ocaml/%{module}/*.cmti
-%{_libdir}/ocaml/%{module}/*.cmxs
 %if %{with ocaml_opt}
 %attr(755,root,root) %{_libdir}/ocaml/stublibs/*.so
 %{_libdir}/ocaml/stublibs/*.so.owner
+%{_libdir}/ocaml/%{module}/*.cmxs
 %endif
 %{_libdir}/ocaml/site-lib/%{module}
 
 %files devel
 %defattr(644,root,root,755)
 %doc CHANGES.txt README.md TODO.md test
-%if %{with ocaml_opt}
 %{_libdir}/ocaml/%{module}/*.a
+%if %{with ocaml_opt}
 %{_libdir}/ocaml/%{module}/*.cmxa
 %{_libdir}/ocaml/%{module}/*.cmx
 %endif
