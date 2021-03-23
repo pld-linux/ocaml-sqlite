@@ -69,23 +69,26 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%dir %{_libdir}/ocaml/%{module}
+%{_libdir}/ocaml/%{module}/META
+%{_libdir}/ocaml/%{module}/*.annot
+%{_libdir}/ocaml/%{module}/*.cma
+%{_libdir}/ocaml/%{module}/*.cmi
+%{_libdir}/ocaml/%{module}/*.cmt
+%{_libdir}/ocaml/%{module}/*.cmti
+%{_libdir}/ocaml/%{module}/*.cmxs
+%if %{with ocaml_opt}
 %attr(755,root,root) %{_libdir}/ocaml/stublibs/*.so
+%{_libdir}/ocaml/stublibs/*.so.owner
+%endif
+%{_libdir}/ocaml/site-lib/%{module}
 
 %files devel
 %defattr(644,root,root,755)
-%doc CHANGES.txt README.md TODO.md src/%{module}.mli test
-%dir %{_libdir}/ocaml/%{module}
-%{_libdir}/ocaml/sqlite3/META
-%{_libdir}/ocaml/sqlite3/sqlite3.annot
-%{_libdir}/ocaml/%{module}/*.cm[xi]
-%{_libdir}/ocaml/%{module}/*.cma
-%{_libdir}/ocaml/%{module}/sqlite3.cmt
-%{_libdir}/ocaml/%{module}/sqlite3.cmti
-%{_libdir}/ocaml/%{module}/sqlite3.mli
-%{_libdir}/ocaml/%{module}/libsqlite3_stubs.a
+%doc CHANGES.txt README.md TODO.md test
 %if %{with ocaml_opt}
-%{_libdir}/ocaml/%{module}/*.cmx[as]
-%{_libdir}/ocaml/%{module}/sqlite3.a
+%{_libdir}/ocaml/%{module}/*.a
+%{_libdir}/ocaml/%{module}/*.cmxa
+%{_libdir}/ocaml/%{module}/*.cmx
 %endif
-%{_libdir}/ocaml/site-lib/%{module}
-%{_libdir}/ocaml/stublibs/dllsqlite3_stubs.so.owner
+%{_libdir}/ocaml/%{module}/*.mli
