@@ -17,7 +17,7 @@
 Summary:	sqlite3 binding for OCaml
 Name:		ocaml-sqlite
 Version:	4.1.3
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/mmottl/sqlite3-ocaml/archive/v%{version}/sqlite3-ocaml-%{version}.tar.gz
@@ -66,9 +66,6 @@ install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{%{module},stublibs}
 	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
 	OCAMLFIND_DOCDIR=$RPM_BUILD_ROOT%{_docdir}/%{name}
 
-install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/%{module}
-ln -sr $RPM_BUILD_ROOT%{_libdir}/ocaml/{%{module},site-lib/%{module}}/META
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -86,7 +83,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/stublibs/*.so.owner
 %{_libdir}/ocaml/%{module}/*.cmxs
 %endif
-%{_libdir}/ocaml/site-lib/%{module}
 
 %files devel
 %defattr(644,root,root,755)
