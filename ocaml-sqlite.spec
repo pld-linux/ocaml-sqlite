@@ -14,7 +14,8 @@
 %endif
 
 %define		module	sqlite3
-Summary:	sqlite3 binding for OCaml
+Summary:	SQLite 3 binding for OCaml
+Summary(pl.UTF-8):	Wiązanie SQLite 3 dla OCamla
 Name:		ocaml-sqlite
 Version:	4.1.3
 Release:	3
@@ -34,15 +35,23 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 SQLite 3 database library wrapper for OCaml.
 
+%description -l pl.UTF-8
+Obudowanie biblioteki baz danych SQLite 3 dla OCamla.
+
 %package devel
-Summary:	sqlite3 binding for OCaml - development part
+Summary:	SQLite 3 binding for OCaml - development part
+Summary(pl.UTF-8):	Wiązanie SQLite 3 dla OCamla - część programistyczna
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%requires_eq ocaml
+%requires_eq	ocaml
 
 %description devel
 This package contains files needed to develop OCaml programs using
 ocaml-sqlite3 library.
+
+%description devel -l pl.UTF-8
+Pakiet ten zawiera pliki niezbędne do tworzenia programów w OCamlu
+używających biblioteki ocaml-sqlite3.
 
 %prep
 %setup -q -n %{module}-ocaml-%{version}
