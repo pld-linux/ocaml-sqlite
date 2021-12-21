@@ -17,17 +17,18 @@
 Summary:	SQLite 3 binding for OCaml
 Summary(pl.UTF-8):	Wiązanie SQLite 3 dla OCamla
 Name:		ocaml-sqlite
-Version:	4.1.3
-Release:	3
-License:	BSD
+Version:	4.4.1
+Release:	1
+License:	MIT
 Group:		Libraries
-Source0:	https://github.com/mmottl/sqlite3-ocaml/archive/v%{version}/sqlite3-ocaml-%{version}.tar.gz
-# Source0-md5:	1b7c29a831fb517dfa0df399eaea2ceb
+#Source0Download: https://github.com/mmottl/sqlite3-ocaml/releases
+Source0:	https://github.com/mmottl/sqlite3-ocaml/releases/download/%{version}/sqlite3-%{version}.tbz
+# Source0-md5:	93763885a3606252aa8004f7662dd161
 URL:		http://mmottl.github.io/sqlite3-ocaml/
-BuildRequires:	ocaml >= 3.04-7
-BuildRequires:	ocaml-camlp4
+BuildRequires:	ocaml >= 1:4.05
+BuildRequires:	ocaml-dune >= 1.4.0
 BuildRequires:	ocaml-findlib-devel
-BuildRequires:	ocaml-ocamlbuild
+BuildRequires:	ocaml-stdio-devel
 BuildRequires:	sqlite3-devel
 %requires_eq	ocaml-runtime
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -54,35 +55,27 @@ Pakiet ten zawiera pliki niezbędne do tworzenia programów w OCamlu
 używających biblioteki ocaml-sqlite3.
 
 %prep
-%setup -q -n %{module}-ocaml-%{version}
+%setup -q -n sqlite3-%{version}
 
 %build
-./configure \
-	--prefix=%{_prefix} \
-	--libdir=%{_libdir} \
-	--docdir=%{_docdir}/%{name} \
-	--destdir=$RPM_BUILD_ROOT
-
-%{__make} -j1 all \
-	CC="%{__cc} %{rpmcflags} -fPIC"
+dune build --verbose
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{%{module},stublibs}
 
-%{__make} -j1 install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
-	OCAMLFIND_DOCDIR=$RPM_BUILD_ROOT%{_docdir}/%{name}
+dune install --destdir=$RPM_BUILD_ROOT
 
-# useless in rpm
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs/*.so.owner
+# sources
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/%{module}/*.ml
+# packaged as %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_prefix}/doc/%{module}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc CHANGES.md LICENSE.md README.md TODO.md pre-v4.2.0-CHANGES.txt
 %dir %{_libdir}/ocaml/%{module}
 %{_libdir}/ocaml/%{module}/META
 %{_libdir}/ocaml/%{module}/*.cma
@@ -93,9 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc CHANGES.txt README.md TODO.md test
 %{_libdir}/ocaml/%{module}/libsqlite3_stubs.a
-%{_libdir}/ocaml/%{module}/*.annot
 %{_libdir}/ocaml/%{module}/*.cmi
 %{_libdir}/ocaml/%{module}/*.cmt
 %{_libdir}/ocaml/%{module}/*.cmti
@@ -105,3 +96,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/%{module}/*.cmx
 %{_libdir}/ocaml/%{module}/*.cmxa
 %endif
+%{_libdir}/ocaml/%{module}/dune-package
+%{_libdir}/ocaml/%{module}/opam
