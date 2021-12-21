@@ -2,10 +2,10 @@
 # - tests. W: Tests are turned off, consider enabling with 'ocaml setup.ml -configure --enable-tests'
 #
 # Conditional build:
-%bcond_without	ocaml_opt	# skip building native optimized binaries (bytecode is always built)
+%bcond_without	ocaml_opt	# native optimized binaries (bytecode is always built)
 
-# not yet available on x32 (ocaml 4.02.1), remove when upstream will support it
-%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
+# not yet available on x32 (ocaml 4.02.1), update when upstream will support it
+%ifnarch %{ix86} %{x8664} %{arm} aarch64 ppc sparc sparcv9
 %undefine	with_ocaml_opt
 %endif
 
@@ -75,6 +75,9 @@ install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{%{module},stublibs}
 	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
 	OCAMLFIND_DOCDIR=$RPM_BUILD_ROOT%{_docdir}/%{name}
 
+# useless in rpm
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs/*.so.owner
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -82,23 +85,23 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %dir %{_libdir}/ocaml/%{module}
 %{_libdir}/ocaml/%{module}/META
-%{_libdir}/ocaml/%{module}/*.annot
 %{_libdir}/ocaml/%{module}/*.cma
-%{_libdir}/ocaml/%{module}/*.cmi
-%{_libdir}/ocaml/%{module}/*.cmt
-%{_libdir}/ocaml/%{module}/*.cmti
 %if %{with ocaml_opt}
-%attr(755,root,root) %{_libdir}/ocaml/stublibs/*.so
-%{_libdir}/ocaml/stublibs/*.so.owner
-%{_libdir}/ocaml/%{module}/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/%{module}/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/stublibs/dllsqlite3_stubs.so
 %endif
 
 %files devel
 %defattr(644,root,root,755)
 %doc CHANGES.txt README.md TODO.md test
-%{_libdir}/ocaml/%{module}/*.a
-%if %{with ocaml_opt}
-%{_libdir}/ocaml/%{module}/*.cmxa
-%{_libdir}/ocaml/%{module}/*.cmx
-%endif
+%{_libdir}/ocaml/%{module}/libsqlite3_stubs.a
+%{_libdir}/ocaml/%{module}/*.annot
+%{_libdir}/ocaml/%{module}/*.cmi
+%{_libdir}/ocaml/%{module}/*.cmt
+%{_libdir}/ocaml/%{module}/*.cmti
 %{_libdir}/ocaml/%{module}/*.mli
+%if %{with ocaml_opt}
+%{_libdir}/ocaml/%{module}/sqlite3.a
+%{_libdir}/ocaml/%{module}/*.cmx
+%{_libdir}/ocaml/%{module}/*.cmxa
+%endif
