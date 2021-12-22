@@ -1,4 +1,5 @@
 # TODO
+# - odoc
 # - tests. W: Tests are turned off, consider enabling with 'ocaml setup.ml -configure --enable-tests'
 #
 # Conditional build:
@@ -17,18 +18,16 @@
 Summary:	SQLite 3 binding for OCaml
 Summary(pl.UTF-8):	Wiązanie SQLite 3 dla OCamla
 Name:		ocaml-sqlite
-Version:	4.4.1
+Version:	5.1.0
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://github.com/mmottl/sqlite3-ocaml/releases
 Source0:	https://github.com/mmottl/sqlite3-ocaml/releases/download/%{version}/sqlite3-%{version}.tbz
-# Source0-md5:	93763885a3606252aa8004f7662dd161
+# Source0-md5:	5d7b2c5d9d16ede92745425d99185371
 URL:		http://mmottl.github.io/sqlite3-ocaml/
-BuildRequires:	ocaml >= 1:4.05
-BuildRequires:	ocaml-dune >= 1.4.0
-BuildRequires:	ocaml-findlib-devel
-BuildRequires:	ocaml-stdio-devel
+BuildRequires:	ocaml >= 1:4.12
+BuildRequires:	ocaml-dune >= 2.7
 BuildRequires:	sqlite3-devel
 %requires_eq	ocaml-runtime
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -58,7 +57,7 @@ używających biblioteki ocaml-sqlite3.
 %setup -q -n sqlite3-%{version}
 
 %build
-dune build --verbose
+dune build --verbose @install
 
 %install
 rm -rf $RPM_BUILD_ROOT
