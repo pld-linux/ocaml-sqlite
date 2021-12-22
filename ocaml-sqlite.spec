@@ -81,8 +81,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/%{module}/*.cma
 %if %{with ocaml_opt}
 %attr(755,root,root) %{_libdir}/ocaml/%{module}/*.cmxs
-%attr(755,root,root) %{_libdir}/ocaml/stublibs/dllsqlite3_stubs.so
 %endif
+%attr(755,root,root) %{_libdir}/ocaml/stublibs/dllsqlite3_stubs.so
 
 %files devel
 %defattr(644,root,root,755)
